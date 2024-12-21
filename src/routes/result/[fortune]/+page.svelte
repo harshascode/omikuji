@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/state';
+	import { page } from '$app/stores';
 	import { fade, fly } from 'svelte/transition';
 
 	// Define the interface for fortune entries
@@ -12,7 +12,7 @@
 	}
 
 	// Extract the `fortune` parameter from the URL
-	const fortune = parseInt(page.params.fortune, 10);
+	const fortune = parseInt($page.params.fortune, 10);
 
 	// Fortune data mapping with proper typing
 	const fortuneData: Record<number, FortuneEntry> = {
@@ -123,12 +123,44 @@
 		points: []
 	};
 
+	// Retrieve the user's name from sessionStorage
+	let userName = '';
+	if (typeof window !== 'undefined') {
+		const storedData = sessionStorage.getItem('fortuneUserData');
+		if (storedData) {
+			const parsedData = JSON.parse(storedData);
+			userName = parsedData.nickname || '';
+		}
+	}
+
 	function goHome() {
 		window.location.href = '/';
 	}
 
 	function tryAgain() {
 		window.location.href = '/result';
+	}
+
+	// Sharing functions
+	function shareOnTwitter(userName: string, fortune: FortuneEntry) {
+		const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+			`${userName}さんの運命の結果は「${fortune.titleEn}」です！ ${fortune.description}`
+		)}&url=${encodeURIComponent(window.location.href)}`;
+		window.open(url, '_blank');
+	}
+
+	function shareOnFacebook(userName: string, fortune: FortuneEntry) {
+		const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(
+			`${userName}さんの運命の結果は「${fortune.titleEn}」です！ ${fortune.description}`
+		)}`;
+		window.open(url, '_blank');
+	}
+
+	function shareOnLine(userName: string, fortune: FortuneEntry) {
+		const url = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(
+			`${userName}さんの運命の結果は「${fortune.titleEn}」です！ ${fortune.description}`
+		)}`;
+		window.open(url, '_blank');
 	}
 </script>
 
@@ -146,6 +178,13 @@
 
 			<!-- Content -->
 			<div class="p-8">
+				<!-- User's Name -->
+				<div class="mb-8 text-center" in:fly={{ y: 50, duration: 500, delay: 300 }}>
+					<p class="text-lg leading-relaxed text-gray-700">
+						{userName ? `こんにちは、${userName}さん。` : ''}
+					</p>
+				</div>
+
 				<!-- Fortune Image -->
 				<div class="relative mb-8" in:fly={{ y: 50, duration: 500, delay: 300 }}>
 					<div
@@ -188,6 +227,27 @@
 					>
 						トップに戻る
 					</button>
+					<!-- Sharing Options -->
+					<div class="mt-4 flex justify-center space-x-4">
+						<button
+							on:click={() => shareOnTwitter(userName, currentFortune)}
+							class="transform rounded-full bg-blue-500 px-6 py-3 text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+						>
+							Twitter で共有
+						</button>
+						<button
+							on:click={() => shareOnFacebook(userName, currentFortune)}
+							class="transform rounded-full bg-blue-700 px-6 py-3 text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+						>
+							Facebook で共有
+						</button>
+						<button
+							on:click={() => shareOnLine(userName, currentFortune)}
+							class="transform rounded-full bg-green-500 px-6 py-3 text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+						>
+							LINE で共有
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
