@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { fade, fly } from 'svelte/transition';
 
 	// Define the interface for fortune entries
@@ -12,7 +12,7 @@
 	}
 
 	// Extract the `fortune` parameter from the URL
-	const fortune = parseInt($page.params.fortune, 10);
+	const fortune = parseInt(page.params.fortune, 10);
 
 	// Fortune data mapping with proper typing
 	const fortuneData: Record<number, FortuneEntry> = {
@@ -154,7 +154,7 @@
 					<img
 						src={currentFortune.image}
 						alt="Fortune result"
-						class="relative mx-auto h-48 w-48 transform rounded-lg object-contain shadow-lg transition-transform hover:scale-105"
+						class="relative mx-auto h-full w-full transform rounded-lg object-contain shadow-lg transition-transform hover:scale-105"
 					/>
 				</div>
 
