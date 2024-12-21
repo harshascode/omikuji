@@ -2,11 +2,20 @@
 	import { page } from '$app/stores';
 	import { fade, fly } from 'svelte/transition';
 
+	// Define the interface for fortune entries
+	interface FortuneEntry {
+		image: string;
+		title: string;
+		titleEn: string;
+		description: string;
+		points: string[];
+	}
+
 	// Extract the `fortune` parameter from the URL
 	const fortune = parseInt($page.params.fortune, 10);
 
-	// Fortune data mapping
-	const fortuneData = {
+	// Fortune data mapping with proper typing
+	const fortuneData: Record<number, FortuneEntry> = {
 		1: {
 			image: '/images/fortune1.png',
 			title: '大吉',
@@ -141,7 +150,7 @@
 				<div class="relative mb-8" in:fly={{ y: 50, duration: 500, delay: 300 }}>
 					<div
 						class="absolute inset-0 rounded-full bg-gradient-to-b from-pink-200 to-red-200 opacity-50 blur-xl"
-					/>
+					></div>
 					<img
 						src={currentFortune.image}
 						alt="Fortune result"
