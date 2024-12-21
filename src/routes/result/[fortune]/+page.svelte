@@ -55,6 +55,54 @@
 				'🍀 Learn from past experiences',
 				'💝 Your time will come'
 			]
+		},
+		5: {
+			image: '/images/fortune4.png',
+			title: '末吉',
+			titleEn: 'Future Fortune',
+			description: 'The seeds of love are being planted. Trust in the timing of life.',
+			points: [
+				'🌈 Better days are ahead',
+				'💫 Keep believing in love',
+				'🍀 Learn from past experiences',
+				'💝 Your time will come'
+			]
+		},
+		6: {
+			image: '/images/fortune4.png',
+			title: '末吉',
+			titleEn: 'Future Fortune',
+			description: 'The seeds of love are being planted. Trust in the timing of life.',
+			points: [
+				'🌈 Better days are ahead',
+				'💫 Keep believing in love',
+				'🍀 Learn from past experiences',
+				'💝 Your time will come'
+			]
+		},
+		7: {
+			image: '/images/fortune4.png',
+			title: '末吉',
+			titleEn: 'Future Fortune',
+			description: 'The seeds of love are being planted. Trust in the timing of life.',
+			points: [
+				'🌈 Better days are ahead',
+				'💫 Keep believing in love',
+				'🍀 Learn from past experiences',
+				'💝 Your time will come'
+			]
+		},
+		8: {
+			image: '/images/fortune4.png',
+			title: '末吉',
+			titleEn: 'Future Fortune',
+			description: 'The seeds of love are being planted. Trust in the timing of life.',
+			points: [
+				'🌈 Better days are ahead',
+				'💫 Keep believing in love',
+				'🍀 Learn from past experiences',
+				'💝 Your time will come'
+			]
 		}
 	};
 
