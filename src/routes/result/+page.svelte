@@ -25,7 +25,20 @@
 		{ number: 5, name: '末吉', description: 'Future Fortune', color: 'from-green-400 to-teal-500' },
 		{ number: 6, name: '吉', description: 'Blessing', color: 'from-blue-400 to-indigo-500' },
 		{ number: 7, name: '凶', description: 'Unlucky', color: 'from-gray-400 to-gray-600' },
-		{ number: 8, name: '大凶', description: 'Very Unlucky', color: 'from-slate-600 to-slate-800' }
+		{ number: 8, name: '大凶', description: 'Very Unlucky', color: 'from-slate-600 to-slate-800' },
+		{
+			number: 9,
+			name: '恋愛成就',
+			description: 'Love Fulfillment',
+			color: 'from-pink-400 to-purple-500'
+		},
+		{ number: 10, name: '幸福', description: 'Happiness', color: 'from-yellow-500 to-pink-500' },
+		{ number: 11, name: '運命', description: 'Destiny', color: 'from-teal-400 to-green-500' },
+		{ number: 12, name: '安心', description: 'Reassurance', color: 'from-blue-300 to-blue-500' },
+		{ number: 13, name: '冒険', description: 'Adventure', color: 'from-red-500 to-orange-600' },
+		{ number: 14, name: '友情', description: 'Friendship', color: 'from-purple-300 to-teal-400' },
+		{ number: 15, name: '再会', description: 'Reunion', color: 'from-gray-500 to-pink-400' },
+		{ number: 16, name: '夢', description: 'Dream', color: 'from-indigo-500 to-purple-600' }
 	];
 
 	let shuffledFortunes = [...fortunes];
