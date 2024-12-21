@@ -3,177 +3,89 @@
 
 	let selectedCard: number | null = null;
 	let isRevealing = false;
-	let showFortune = false;
-	let fortuneNumber: number | null = null;
-
-	const cards = Array.from({ length: 32 }, (_, i) => ({
-		id: i,
-		isFlipped: false
-	}));
-
-	function selectCard(cardId: number) {
-		if (selectedCard !== null || isRevealing) return;
-
-		selectedCard = cardId;
-		isRevealing = true;
-
-		// Calculate fortune number (1-4) based on the card selected
-		fortuneNumber = (cardId % 4) + 1;
-
-		// Add animation delay before showing fortune
-		setTimeout(() => {
-			showFortune = true;
-		}, 1000);
-	}
 
 	function goToResult(fortune: number) {
-		window.location.href = `/result/${fortune}`;
+		selectedCard = fortune;
+		isRevealing = true;
+		setTimeout(() => {
+			window.location.href = `/result/${fortune}`;
+		}, 800);
 	}
 
-	function resetSelection() {
-		selectedCard = null;
-		isRevealing = false;
-		showFortune = false;
-		fortuneNumber = null;
-	}
+	const fortunes = [
+		{ number: 1, name: '大吉', description: 'Greatest Fortune' },
+		{ number: 2, name: '中吉', description: 'Good Fortune' },
+		{ number: 3, name: '小吉', description: 'Moderate Fortune' },
+		{ number: 4, name: '末吉', description: 'Future Fortune' }
+	];
 </script>
 
 <div
-	class="flex min-h-screen flex-col items-center bg-gradient-to-b from-red-50 to-pink-50 px-4 py-12"
+	class="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-red-50 to-pink-50 px-4 py-12"
 >
-	<!-- Title Section -->
-	<div class="mb-12 text-center">
-		<h1 class="mb-8 text-4xl font-medium tracking-wider text-red-900">恋みくじを引く</h1>
-		<p class="mb-12 text-lg tracking-wider text-red-700">
-			{#if !selectedCard}
-				心を穏やかにし、恋みくじをタップしてください。
-			{:else if isRevealing && !showFortune}
-				運命が決まっています...
-			{:else}
-				あなたの運勢が明らかになりました！
-			{/if}
-		</p>
-	</div>
+	<div
+		class="w-full max-w-4xl rounded-2xl bg-white/90 p-8 shadow-xl backdrop-blur-sm"
+		in:scale={{ duration: 400, delay: 200 }}
+	>
+		<!-- Header Section -->
+		<div class="mb-12 text-center">
+			<h1
+				class="mb-4 bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-4xl font-bold text-transparent"
+			>
+				恋みくじを引く
+			</h1>
+			<p class="text-lg text-gray-600">心を穏やかにし、恋みくじをタップしてください。</p>
+		</div>
 
-	{#if !showFortune}
 		<!-- Fortune Cards Grid -->
-		<div class="w-full max-w-5xl">
-			<div class="mb-4 grid grid-cols-4 gap-4 md:grid-cols-8">
-				{#each cards.slice(0, 16) as card}
-					<button
-						on:click={() => selectCard(card.id)}
-						class="transform transition-all duration-500"
-						class:opacity-50={selectedCard !== null && selectedCard !== card.id}
-						disabled={selectedCard !== null}
-					>
-						<div
-							class="flex aspect-[1/3] flex-col items-center justify-between rounded bg-[#DC0000] p-4 text-white transition-all hover:bg-[#B00000]"
-							class:scale-110={selectedCard === card.id}
-							class:rotate-y-180={selectedCard === card.id}
-						>
-							<svg
-								class="h-4 w-4"
-								xmlns="http://www.w3.org/2000/svg"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="2"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-							>
-								<path d="M7 17L17 7M7 7h10v10" />
-							</svg>
-							<div class="writing-vertical text-gold-500">
-								<div class="text-yellow-400">恋</div>
-								<div>み</div>
-								<div>く</div>
-								<div>じ</div>
-							</div>
+		<div class="mb-8 grid grid-cols-2 gap-6 md:grid-cols-4">
+			{#each fortunes as fortune}
+				<button
+					type="button"
+					class="group relative transform transition-all duration-300 hover:scale-105"
+					class:opacity-50={isRevealing && selectedCard !== fortune.number}
+					on:click={() => goToResult(fortune.number)}
+					disabled={isRevealing}
+				>
+					<div
+						class="absolute inset-0 rounded-xl bg-gradient-to-br from-red-400 to-pink-500 opacity-75 transition-opacity group-hover:opacity-100"
+					/>
+					<div class="relative rounded-xl border border-white/20 bg-white/10 p-6 backdrop-blur-sm">
+						<div class="writing-vertical space-y-2 text-2xl font-medium text-white">
+							<div class="font-bold text-yellow-300">{fortune.name}</div>
+							<div class="text-base opacity-90">{fortune.description}</div>
 						</div>
-					</button>
-				{/each}
-			</div>
-			<div class="mb-12 grid grid-cols-4 gap-4 md:grid-cols-8">
-				{#each cards.slice(16) as card}
-					<button
-						on:click={() => selectCard(card.id)}
-						class="transform transition-all duration-500"
-						class:opacity-50={selectedCard !== null && selectedCard !== card.id}
-						disabled={selectedCard !== null}
-					>
-						<div
-							class="flex aspect-[1/3] flex-col items-center justify-between rounded bg-[#DC0000] p-4 text-white transition-all hover:bg-[#B00000]"
-							class:scale-110={selectedCard === card.id}
-							class:rotate-y-180={selectedCard === card.id}
-						>
-							<svg
-								class="h-4 w-4"
-								xmlns="http://www.w3.org/2000/svg"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="2"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-							>
-								<path d="M7 17L17 7M7 7h10v10" />
-							</svg>
-							<div class="writing-vertical text-gold-500">
-								<div class="text-yellow-400">恋</div>
-								<div>み</div>
-								<div>く</div>
-								<div>じ</div>
-							</div>
-						</div>
-					</button>
-				{/each}
+					</div>
+				</button>
+			{/each}
+		</div>
+
+		<!-- Action Button -->
+		<div class="mt-8 text-center">
+			<p class="mb-4 text-sm text-gray-500">タップして運命を探る</p>
+			<div class="mx-auto h-16 w-16 animate-bounce">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+					class="text-red-400"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M19 14l-7 7m0 0l-7-7m7 7V3"
+					/>
+				</svg>
 			</div>
 		</div>
-	{:else}
-		<!-- Fortune Preview Card -->
-		<div
-			class="w-full max-w-md rounded-xl bg-white p-8 text-center shadow-2xl"
-			in:scale={{ duration: 400, delay: 200 }}
-		>
-			<h2 class="mb-6 text-2xl font-bold text-red-900">Your Fortune</h2>
-			<div class="mb-8">
-				<div class="mx-auto flex h-48 w-48 items-center justify-center rounded-lg bg-red-100">
-					<span class="text-6xl">🎋</span>
-				</div>
-			</div>
-			<div class="space-y-4">
-				<button
-					on:click={() => goToResult(fortuneNumber)}
-					class="w-full rounded-full bg-red-600 px-8 py-3 text-lg text-white transition-colors hover:bg-red-700"
-				>
-					運勢を見る (View Fortune)
-				</button>
-				<button
-					on:click={resetSelection}
-					class="w-full rounded-full bg-gray-200 px-8 py-3 text-lg text-gray-800 transition-colors hover:bg-gray-300"
-				>
-					もう一度引く (Try Again)
-				</button>
-			</div>
-		</div>
-	{/if}
+	</div>
 </div>
 
 <style>
 	.writing-vertical {
 		writing-mode: vertical-rl;
 		text-orientation: upright;
-	}
-
-	.rotate-y-180 {
-		transform: rotateY(180deg);
-	}
-
-	button:disabled {
-		cursor: not-allowed;
-	}
-
-	.scale-110 {
-		transform: scale(1.1);
 	}
 </style>
