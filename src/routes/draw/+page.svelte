@@ -8,7 +8,8 @@
 	let isSubmitting = false;
 
 	// Form validation
-	$: isFormValid = nickname.length > 0 && nickname.length <= 10 && gender && loveStatus;
+	$: isFormValid =
+		nickname.length > 0 && nickname.length <= 10 && gender !== '' && loveStatus !== '';
 
 	// Handle form submission
 	function handleSubmit() {
@@ -50,7 +51,9 @@
 				<!-- Nickname Input -->
 				<div class="transform transition duration-300 hover:scale-[1.02]">
 					<div class="rounded-lg border-2 border-pink-100 bg-white p-6">
-						<label class="mb-4 block text-xl font-bold text-gray-800"> 🎭 ニックネーム </label>
+						<label for="nickname" class="mb-4 block text-xl font-bold text-gray-800">
+							🎭 ニックネーム
+						</label>
 						<input
 							type="text"
 							bind:value={nickname}
@@ -76,7 +79,8 @@
 				<!-- Gender Selection -->
 				<div class="transform transition duration-300 hover:scale-[1.02]">
 					<div class="rounded-lg border-2 border-pink-100 bg-white p-6">
-						<label class="mb-4 block text-xl font-bold text-gray-800"> 👤 性別 </label>
+						<input aria-label="Gender" />
+						<label for="gender" class="mb-4 block text-xl font-bold text-gray-800"> 👤 性別 </label>
 						<div class="grid grid-cols-3 gap-4">
 							{#each ['female', 'male', 'other'] as value}
 								<label class="relative">
@@ -100,7 +104,9 @@
 				<!-- Love Status -->
 				<div class="transform transition duration-300 hover:scale-[1.02]">
 					<div class="rounded-lg border-2 border-pink-100 bg-white p-6">
-						<label class="mb-4 block text-xl font-bold text-gray-800"> 💖 恋愛状況 </label>
+						<label for="love-status" class="mb-4 block text-xl font-bold text-gray-800">
+							💖 恋愛状況
+						</label>
 						<select
 							bind:value={loveStatus}
 							class="w-full cursor-pointer rounded-lg border-2 border-pink-200
