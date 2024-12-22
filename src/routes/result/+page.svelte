@@ -1,12 +1,15 @@
 <script lang="ts">
-	import { fade, fly } from 'svelte/transition';
+	import { fade, scale, fly } from 'svelte/transition';
+	import { backOut, elasticOut } from 'svelte/easing';
 	import { onMount } from 'svelte';
 
 	let selectedCard: number | null = null;
 	let isRevealing = false;
 	let isShuffling = false;
 	let hasShuffled = false;
+	let showAllCards = false; // New state variable
 
+	// Your complete fortunes array
 	const fortunes = Object.freeze([
 		{
 			number: 1,
@@ -61,11 +64,41 @@
 			name: '大吉',
 			emoji: '🌟',
 			color: 'from-rose-500 to-pink-600'
+		},
+		{
+			number: 10,
+			name: '大吉',
+			emoji: '🌟',
+			color: 'from-rose-500 to-pink-600'
+		},
+		{
+			number: 11,
+			name: '大吉',
+			emoji: '🌟',
+			color: 'from-rose-500 to-pink-600'
+		},
+		{
+			number: 12,
+			name: '大吉',
+			emoji: '🌟',
+			color: 'from-rose-500 to-pink-600'
+		},
+		{
+			number: 13,
+			name: '大吉',
+			emoji: '🌟',
+			color: 'from-rose-500 to-pink-600'
 		}
-		// ... (keep other fortunes with added emojis)
+		// ... add all your fortune cards here
 	]);
 
 	let shuffledFortunes = [...fortunes];
+
+	// Computed property to get displayed cards
+	$: displayedFortunes = showAllCards ? shuffledFortunes : shuffledFortunes.slice(0, 8);
+
+	// Computed property to check if there are more cards to show
+	$: hasMoreCards = shuffledFortunes.length > 8;
 
 	function shuffleCards() {
 		if (isShuffling) return;
@@ -96,7 +129,11 @@
 
 		setTimeout(() => {
 			window.location.href = `/result/${fortune}`;
-		}, 100);
+		}, 800);
+	}
+
+	function toggleShowMore() {
+		showAllCards = !showAllCards;
 	}
 
 	onMount(() => {
@@ -151,15 +188,15 @@
 		</div>
 
 		<div
-			class="mb-12 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4 lg:gap-8"
+			class="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4 lg:gap-8"
 			class:pointer-events-none={isShuffling}
 		>
-			{#each shuffledFortunes as fortune, i (fortune.number)}
+			{#each displayedFortunes as fortune, i (fortune.number)}
 				<button
 					type="button"
 					class="aspect-[2/3] w-full rounded-lg bg-gradient-to-br {fortune.color} 
-                   shadow-sm transition-opacity duration-75 hover:opacity-90
-                   disabled:cursor-not-allowed"
+                           shadow-sm transition-opacity duration-150 hover:opacity-90
+                           disabled:cursor-not-allowed"
 					class:opacity-50={isRevealing && selectedCard !== fortune.number}
 					on:click={() => goToResult(fortune.number)}
 					disabled={isRevealing || isShuffling}
@@ -174,6 +211,21 @@
 			{/each}
 		</div>
 
+		{#if hasMoreCards && !showAllCards}
+			<div class="text-center">
+				<button
+					class="group relative rounded-full bg-gradient-to-r from-red-500 via-purple-500 to-pink-500 px-8
+                           py-3 text-lg font-medium text-white shadow-lg
+                           transition-all duration-300 hover:scale-105 hover:shadow-xl
+                           focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2
+                           disabled:cursor-not-allowed disabled:opacity-50"
+					on:click={toggleShowMore}
+				>
+					Show More
+				</button>
+			</div>
+		{/if}
+
 		{#if !hasShuffled}
 			<div
 				class="animate-pulse space-y-4 text-center"
@@ -183,7 +235,7 @@
 			</div>
 		{:else}
 			<div class="space-y-4 text-center" in:fade|local={{ duration: 300 }}>
-				<p class="text-lg text-gray-600">カードを選んでタップしてください</p>
+				<p class="text-lg text-gray-600 my-6">カードを選んでタップしてください</p>
 			</div>
 		{/if}
 	</div>
