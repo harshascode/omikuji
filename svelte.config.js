@@ -13,7 +13,7 @@ const config = {
 		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
 		adapter: adapter(),
 		prerender: {
-			// entries: ['*'], // Prerender all routes except those explicitly excluded
+			entries: ['*'], // Prerender all routes except those explicitly excluded
 			handleHttpError: 'warn' // Warn on HTTP errors but don't fail the build
 		}
 	}
