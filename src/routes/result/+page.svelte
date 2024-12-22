@@ -119,45 +119,24 @@
 		<div
 			class="mb-12 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4 lg:gap-8"
 			class:pointer-events-none={isShuffling}
-			style="perspective: 1000px;"
 		>
 			{#each shuffledFortunes as fortune, i (fortune.number)}
-				<div
-					class="relative aspect-[3/4] transform-gpu transition-all duration-500"
-					style="transform-style: preserve-3d; 
-                            transition-delay: {i * 50}ms;"
-					class:animate-shuffle={isShuffling}
-					in:scale|local={{ duration: 400, delay: i * 50, easing: elasticOut }}
+				<button
+					type="button"
+					class="aspect-[2/3] w-full rounded-lg bg-gradient-to-br {fortune.color} 
+                   shadow-sm transition-opacity duration-150 hover:opacity-90
+                   disabled:cursor-not-allowed"
+					class:opacity-50={isRevealing && selectedCard !== fortune.number}
+					on:click={() => goToResult(fortune.number)}
+					disabled={isRevealing || isShuffling}
 				>
-					<button
-						type="button"
-						class="group relative h-full w-full transition-transform duration-500
-                               hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500
-                               focus:ring-offset-2 disabled:cursor-not-allowed"
-						class:opacity-50={isRevealing && selectedCard !== fortune.number}
-						on:click={() => goToResult(fortune.number)}
-						disabled={isRevealing || isShuffling}
-					>
-						<!-- Card Face -->
-						<div
-							class="absolute inset-0 overflow-hidden rounded-2xl shadow-xl
-                                  transition-all duration-300 group-hover:shadow-2xl"
-							style="backface-visibility: hidden;"
-						>
-							<div
-								class="absolute inset-0 bg-gradient-to-br {fortune.color} 
-                                      opacity-90 transition-opacity group-hover:opacity-100"
-							></div>
-							<div class="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
-							<div class="relative flex h-full items-center justify-center p-6">
-								<div class="writing-vertical space-y-4 text-center">
-									<span class="text-4xl font-bold text-white drop-shadow-lg">{fortune.emoji}</span>
-									<h3 class="text-2xl font-bold text-white drop-shadow-md">{fortune.name}</h3>
-								</div>
-							</div>
+					<div class="flex h-full flex-col items-center justify-center p-3">
+						<span class="text-2xl text-white">{fortune.emoji}</span>
+						<div class="writing-vertical mt-2">
+							<h3 class="text-lg font-medium text-white">{fortune.name}</h3>
 						</div>
-					</button>
-				</div>
+					</div>
+				</button>
 			{/each}
 		</div>
 
