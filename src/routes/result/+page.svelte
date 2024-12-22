@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { fade, scale, fly } from 'svelte/transition';
-	import { backOut, elasticOut } from 'svelte/easing';
+	import { fade, fly } from 'svelte/transition';
 	import { onMount } from 'svelte';
 
 	let selectedCard: number | null = null;
@@ -8,7 +7,6 @@
 	let isShuffling = false;
 	let hasShuffled = false;
 
-	// Optimized fortune list with emojis and improved descriptions
 	const fortunes = Object.freeze([
 		{
 			number: 1,
@@ -21,13 +19,54 @@
 			name: '大吉',
 			emoji: '🌟',
 			color: 'from-rose-500 to-pink-600'
+		},
+		{
+			number: 3,
+			name: '大吉',
+			emoji: '🌟',
+			color: 'from-rose-500 to-pink-600'
+		},
+		{
+			number: 4,
+			name: '大吉',
+			emoji: '🌟',
+			color: 'from-rose-500 to-pink-600'
+		},
+		{
+			number: 5,
+			name: '大吉',
+			emoji: '🌟',
+			color: 'from-rose-500 to-pink-600'
+		},
+		{
+			number: 6,
+			name: '大吉',
+			emoji: '🌟',
+			color: 'from-rose-500 to-pink-600'
+		},
+		{
+			number: 7,
+			name: '大吉',
+			emoji: '🌟',
+			color: 'from-rose-500 to-pink-600'
+		},
+		{
+			number: 8,
+			name: '大吉',
+			emoji: '🌟',
+			color: 'from-rose-500 to-pink-600'
+		},
+		{
+			number: 9,
+			name: '大吉',
+			emoji: '🌟',
+			color: 'from-rose-500 to-pink-600'
 		}
 		// ... (keep other fortunes with added emojis)
 	]);
 
 	let shuffledFortunes = [...fortunes];
 
-	// Improved shuffle animation with spring physics
 	function shuffleCards() {
 		if (isShuffling) return;
 		isShuffling = true;
@@ -41,7 +80,6 @@
 
 		shuffledFortunes = newShuffled;
 
-		// Smoother animation timing
 		setTimeout(() => {
 			isShuffling = false;
 		}, 600);
@@ -52,18 +90,16 @@
 		selectedCard = fortune;
 		isRevealing = true;
 
-		// Add haptic feedback if available
 		if (window.navigator.vibrate) {
 			window.navigator.vibrate(100);
 		}
 
 		setTimeout(() => {
 			window.location.href = `/result/${fortune}`;
-		}, 800);
+		}, 100);
 	}
 
 	onMount(() => {
-		// Initial subtle shuffle
 		setTimeout(shuffleCards, 500);
 	});
 </script>
@@ -73,7 +109,6 @@
 	in:fade|local={{ duration: 100 }}
 >
 	<div class="mx-auto max-w-7xl">
-		<!-- Enhanced Header Section -->
 		<div class="mb-12 space-y-6 text-center" in:fly|local={{ y: -20, duration: 800, delay: 200 }}>
 			<h1
 				class="bg-gradient-to-r from-red-600 via-purple-600 to-pink-600 bg-clip-text text-5xl font-bold
@@ -115,7 +150,6 @@
 			</button>
 		</div>
 
-		<!-- Improved Card Grid -->
 		<div
 			class="mb-12 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4 lg:gap-8"
 			class:pointer-events-none={isShuffling}
@@ -124,7 +158,7 @@
 				<button
 					type="button"
 					class="aspect-[2/3] w-full rounded-lg bg-gradient-to-br {fortune.color} 
-                   shadow-sm transition-opacity duration-150 hover:opacity-90
+                   shadow-sm transition-opacity duration-75 hover:opacity-90
                    disabled:cursor-not-allowed"
 					class:opacity-50={isRevealing && selectedCard !== fortune.number}
 					on:click={() => goToResult(fortune.number)}
@@ -140,7 +174,6 @@
 			{/each}
 		</div>
 
-		<!-- Interactive Guide -->
 		{#if !hasShuffled}
 			<div
 				class="animate-pulse space-y-4 text-center"
@@ -157,14 +190,12 @@
 </div>
 
 <style>
-	/* Improved vertical writing mode */
 	.writing-vertical {
 		writing-mode: vertical-rl;
 		text-orientation: upright;
 		will-change: transform;
 	}
 
-	/* Enhanced shuffle animation */
 	@keyframes shuffle {
 		0%,
 		100% {
@@ -183,19 +214,16 @@
 		will-change: transform;
 	}
 
-	/* Performance optimizations */
 	.transform-gpu {
 		transform: translateZ(0);
 	}
 
-	/* Responsive design improvements */
 	@media (max-width: 640px) {
 		.writing-vertical {
 			font-size: 90%;
 		}
 	}
 
-	/* Reduced motion preferences */
 	@media (prefers-reduced-motion: reduce) {
 		.animate-shuffle {
 			animation: none;
