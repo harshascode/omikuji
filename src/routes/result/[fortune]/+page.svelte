@@ -1,219 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { fade, fly } from 'svelte/transition';
+	import { fortuneData } from '$lib/fortuneData';
 
-	// Define the interface for fortune entries
-	interface FortuneEntry {
-		image: string;
-		title: string;
-		titleEn: string;
-		description: string;
-		points: string[];
-	}
-
-	// Extract the `fortune` parameter from the URL
+	// Load fortune from URL parameter
 	const fortune = parseInt($page.params.fortune, 10);
-
-	// Fortune data mapping with proper typing
-	const fortuneData: Record<number, FortuneEntry> = {
-		1: {
-			image: '/images/fortune1.png',
-			title: '大吉',
-			titleEn: 'Excellent Fortune',
-			description:
-				'A wonderful romance is about to begin. Keep your heart open to new possibilities!',
-			points: [
-				'✨ Love will find you unexpectedly',
-				'💝 Your sincere feelings will reach someone special',
-				'🌸 A perfect time for new beginnings',
-				'⭐ Your charm is at its peak'
-			]
-		},
-		2: {
-			image: '/images/fortune2.png',
-			title: '中吉',
-			titleEn: 'Good Fortune',
-			description: 'Positive energy surrounds your love life. Stay optimistic!',
-			points: [
-				'💫 Good opportunities are coming',
-				'💌 Express your feelings openly',
-				'🍀 Lucky encounters await',
-				'🌟 Your efforts will be rewarded'
-			]
-		},
-		3: {
-			image: '/images/fortune3.png',
-			title: '小吉',
-			titleEn: 'Moderate Fortune',
-			description: 'Take small steps forward in love. Patience is key.',
-			points: [
-				'💭 Focus on self-improvement',
-				'💖 Build stronger connections',
-				'🌱 Nurture existing relationships',
-				'✨ Good things come to those who wait'
-			]
-		},
-		4: {
-			image: '/images/fortune4.png',
-			title: '末吉',
-			titleEn: 'Future Fortune',
-			description: 'The seeds of love are being planted. Trust in the timing of life.',
-			points: [
-				'🌈 Better days are ahead',
-				'💫 Keep believing in love',
-				'🍀 Learn from past experiences',
-				'💝 Your time will come'
-			]
-		},
-		5: {
-			image: '/images/fortune5.png',
-			title: '吉',
-			titleEn: 'Blessing',
-			description: 'Good luck and positive energy are on your side. Embrace the good times ahead!',
-			points: [
-				'🌟 A lucky break is coming your way',
-				'🌸 Positive vibes all around',
-				'💖 Relationships will flourish',
-				'🍀 Success in your endeavors'
-			]
-		},
-		6: {
-			image: '/images/fortune6.png',
-			title: '凶',
-			titleEn: 'Unlucky',
-			description: 'Challenges may arise, but stay strong and you will overcome them.',
-			points: [
-				'⚠️ Be cautious in your decisions',
-				'🌧️ Tough times ahead',
-				'💪 Stay resilient and strong',
-				'🔄 Better days will come'
-			]
-		},
-		7: {
-			image: '/images/fortune7.png',
-			title: '大凶',
-			titleEn: 'Very Unlucky',
-			description:
-				'Difficult times are ahead, but remember that every struggle is a chance to grow stronger.',
-			points: [
-				'🌧️ Prepare for challenges',
-				'💪 Strength and resilience are key',
-				'🔄 Focus on self-improvement',
-				'🌈 Look for the silver lining'
-			]
-		},
-		8: {
-			image: '/images/fortune8.png',
-			title: '中凶',
-			titleEn: 'Moderately Unlucky',
-			description:
-				'You may face some obstacles, but perseverance and patience will guide you through.',
-			points: [
-				'⚠️ Obstacles ahead',
-				'💪 Persevere and stay patient',
-				'🔄 Focus on long-term goals',
-				'🌈 Better times will follow'
-			]
-		},
-		9: {
-			image: '/images/fortune9.png',
-			title: '恋愛成就',
-			titleEn: 'Love Fulfillment',
-			description: 'Your heart’s desires will soon be fulfilled. Believe in the power of love.',
-			points: [
-				'💖 True love is within reach',
-				'🌸 Cherished moments are near',
-				'✨ Let your confidence shine',
-				'💌 Someone special is thinking of you'
-			]
-		},
-		10: {
-			image: '/images/fortune10.png',
-			title: '幸福',
-			titleEn: 'Happiness',
-			description: 'Happiness in love surrounds you. Share your joy with others!',
-			points: [
-				'😊 Your positive energy attracts love',
-				'💝 Deep connections are forming',
-				'🌟 Celebrate your unique charm',
-				'🌈 Love and happiness go hand in hand'
-			]
-		},
-		11: {
-			image: '/images/fortune11.png',
-			title: '運命',
-			titleEn: 'Destiny',
-			description: 'A destined encounter is on the horizon. Trust the journey.',
-			points: [
-				'💫 Fate is working in your favor',
-				'🌸 A meaningful connection is near',
-				'💌 Listen to your intuition',
-				'⭐ Trust the universe’s timing'
-			]
-		},
-		12: {
-			image: '/images/fortune12.png',
-			title: '安心',
-			titleEn: 'Reassurance',
-			description: 'Love may be slow, but steady. Embrace the calmness in your heart.',
-			points: [
-				'🌿 Peace and love will grow naturally',
-				'💞 Build trust step by step',
-				'🌈 Appreciate the small moments',
-				'💪 Your patience will be rewarded'
-			]
-		},
-		13: {
-			image: '/images/fortune13.png',
-			title: '冒険',
-			titleEn: 'Adventure',
-			description: 'An exciting love adventure awaits. Take a bold step forward!',
-			points: [
-				'💫 Embrace the unknown',
-				'🌟 A thrilling connection is possible',
-				'💖 Be daring in love',
-				'🌈 Explore new horizons together'
-			]
-		},
-		14: {
-			image: '/images/fortune14.png',
-			title: '友情',
-			titleEn: 'Friendship',
-			description: 'Love might blossom from an unexpected friendship. Be open to surprises.',
-			points: [
-				'🌼 Cherish your current friendships',
-				'💞 Love and friendship go hand in hand',
-				'💌 Someone close may surprise you',
-				'🌟 Strong bonds create lasting love'
-			]
-		},
-		15: {
-			image: '/images/fortune15.png',
-			title: '再会',
-			titleEn: 'Reunion',
-			description: 'A past connection may re-enter your life. Trust in second chances.',
-			points: [
-				'🔄 Old flames may reignite',
-				'🌸 Memories could lead to new love',
-				'💖 Keep an open heart',
-				'🌈 Embrace what feels right'
-			]
-		},
-		16: {
-			image: '/images/fortune16.png',
-			title: '夢',
-			titleEn: 'Dream',
-			description: 'A love from your dreams is closer than you think. Dare to dream big!',
-			points: [
-				'🌠 Keep believing in your ideals',
-				'💖 Dreams may become reality',
-				'✨ Stay hopeful and optimistic',
-				'💌 A magical love is near'
-			]
-		}
-	};
-
-	const currentFortune = fortuneData[fortune] || {
+	const currentFortune = fortuneData[fortune as keyof typeof fortuneData] || {
 		image: '/images/default.png',
 		title: '運命',
 		titleEn: 'Unknown Fortune',
@@ -221,140 +12,175 @@
 		points: []
 	};
 
-	// Retrieve the user's name from sessionStorage
-	let userName = '';
+	// Get user data from session storage
+	let userData = {
+		nickname: ''
+	};
+
 	if (typeof window !== 'undefined') {
-		const storedData = sessionStorage.getItem('fortuneUserData');
-		if (storedData) {
-			const parsedData = JSON.parse(storedData);
-			userName = parsedData.nickname || '';
+		const stored = sessionStorage.getItem('fortuneUserData');
+		if (stored) {
+			userData = JSON.parse(stored);
 		}
-	}
-
-	function goHome() {
-		window.location.href = '/';
-	}
-
-	function tryAgain() {
-		window.location.href = '/result';
-	}
-
-	// Sharing functions
-	function shareOnTwitter(userName: string, fortune: FortuneEntry) {
-		const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-			`${userName}さんの運命の結果は「${fortune.titleEn}」です！ ${fortune.description}`
-		)}&url=${encodeURIComponent(window.location.href)}`;
-		window.open(url, '_blank');
-	}
-
-	function shareOnFacebook(userName: string, fortune: FortuneEntry) {
-		const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(
-			`${userName}さんの運命の結果は「${fortune.titleEn}」です！ ${fortune.description}`
-		)}`;
-		window.open(url, '_blank');
-	}
-
-	function shareOnLine(userName: string, fortune: FortuneEntry) {
-		const url = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(
-			`${userName}さんの運命の結果は「${fortune.titleEn}」です！ ${fortune.description}`
-		)}`;
-		window.open(url, '_blank');
 	}
 </script>
 
-<main
-	class="min-h-screen bg-gradient-to-b from-red-50 to-pink-50 px-4 py-12"
-	in:fade={{ duration: 300 }}
->
-	<div class="mx-auto max-w-2xl">
+<svelte:head>
+	<title>{currentFortune.titleEn} - おみくじ</title>
+	<meta name="description" content={currentFortune.description} />
+</svelte:head>
+
+<main class="min-h-screen bg-gradient-to-b from-red-50 to-pink-50 px-4 py-12">
+	<article class="animate-fade-in mx-auto max-w-2xl">
 		<div class="overflow-hidden rounded-2xl bg-white/90 shadow-xl backdrop-blur-sm">
 			<!-- Header -->
-			<div class="bg-gradient-to-r from-red-600 to-pink-600 p-6 text-center text-white">
+			<header class="bg-gradient-to-r from-red-600 to-pink-600 p-6 text-center text-white">
 				<h1 class="mb-2 text-3xl font-bold">{currentFortune.title}</h1>
 				<p class="text-lg opacity-90">{currentFortune.titleEn}</p>
-			</div>
+			</header>
 
-			<!-- Content -->
-			<div class="p-8">
-				<!-- User's Name -->
-				<div class="mb-8 text-center" in:fly={{ y: 50, duration: 500, delay: 300 }}>
-					<p class="text-lg leading-relaxed text-gray-700">
-						{userName ? `こんにちは、${userName}さん。` : ''}
-					</p>
-				</div>
+			<div class="space-y-8 p-8">
+				<!-- User Greeting -->
+				{#if userData.nickname}
+					<div class="animate-slide-up text-center">
+						<p class="text-lg leading-relaxed text-gray-700">
+							こんにちは、{userData.nickname}さん。
+						</p>
+					</div>
+				{/if}
 
 				<!-- Fortune Image -->
-				<div class="relative mb-8" in:fly={{ y: 50, duration: 500, delay: 300 }}>
+				<figure class="animate-slide-up relative">
 					<div
-						class="absolute inset-0 rounded-full bg-gradient-to-b from-pink-200 to-red-200 opacity-50 blur-xl"
+						class="absolute inset-0 rounded-full bg-gradient-to-b from-pink-200
+                                to-red-200 opacity-50 blur-xl"
 					></div>
 					<img
 						src={currentFortune.image}
-						alt="Fortune result"
-						class="relative mx-auto h-full w-full transform rounded-lg object-contain shadow-lg transition-transform hover:scale-105"
+						alt={`Fortune: ${currentFortune.titleEn}`}
+						class="relative mx-auto w-full transform rounded-lg shadow-lg
+                               transition-transform duration-300 hover:scale-105"
+						loading="eager"
 					/>
-				</div>
+				</figure>
 
 				<!-- Fortune Description -->
-				<div class="mb-8 text-center" in:fly={{ y: 50, duration: 500, delay: 400 }}>
+				<div class="animate-slide-up text-center">
 					<p class="text-lg leading-relaxed text-gray-700">
 						{currentFortune.description}
 					</p>
 				</div>
 
 				<!-- Fortune Points -->
-				<div class="mb-8 space-y-3" in:fly={{ y: 50, duration: 500, delay: 500 }}>
+				<ul class="animate-slide-up space-y-3" role="list">
 					{#each currentFortune.points as point}
-						<div class="rounded-lg bg-red-50 p-4 text-red-800">
+						<li class="rounded-lg bg-red-50 p-4 text-red-800">
 							{point}
-						</div>
+						</li>
 					{/each}
-				</div>
+				</ul>
 
-				<!-- Action Buttons -->
-				<div class="flex flex-col gap-4" in:fly={{ y: 50, duration: 500, delay: 600 }}>
-					<button
-						on:click={tryAgain}
-						class="transform rounded-full bg-gradient-to-r from-red-600 to-pink-600 px-8 py-3 text-lg text-white shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl"
+				<!-- Navigation and Sharing -->
+				<nav class="animate-slide-up flex flex-col gap-4">
+					<a
+						href="/draw"
+						class="transform rounded-full bg-gradient-to-r from-red-600 to-pink-600
+                              px-8 py-3 text-center text-lg text-white shadow-lg
+                              transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
 					>
 						もう一度おみくじを引く
-					</button>
-					<button
-						on:click={goHome}
-						class="rounded-full bg-gray-200 px-8 py-3 text-lg text-gray-800 transition-colors hover:bg-gray-300"
+					</a>
+
+					<a
+						href="/"
+						class="rounded-full bg-gray-200 px-8 py-3 text-center text-lg
+                              text-gray-800 transition-colors duration-300 hover:bg-gray-300"
 					>
 						トップに戻る
-					</button>
-					<!-- Sharing Options -->
-					<div class="mt-4 flex justify-center space-x-4">
-						<button
-							on:click={() => shareOnTwitter(userName, currentFortune)}
-							class="transform rounded-full bg-blue-500 px-6 py-3 text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+					</a>
+
+					<!-- Social Share Links -->
+					<div class="mt-4 grid grid-cols-3 gap-4">
+						<a
+							href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+								`${userData.nickname}さんの運命の結果は「${currentFortune.titleEn}」です！`
+							)}&url=${encodeURIComponent($page.url.href)}`}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="transform rounded-full bg-blue-500 px-6 py-3 text-center
+                                  text-white shadow-lg transition-all duration-300
+                                  hover:scale-105 hover:shadow-xl"
 						>
 							Twitter で共有
-						</button>
-						<button
-							on:click={() => shareOnFacebook(userName, currentFortune)}
-							class="transform rounded-full bg-blue-700 px-6 py-3 text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+						</a>
+
+						<a
+							href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+								$page.url.href
+							)}`}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="transform rounded-full bg-blue-700 px-6 py-3 text-center
+                                  text-white shadow-lg transition-all duration-300
+                                  hover:scale-105 hover:shadow-xl"
 						>
 							Facebook で共有
-						</button>
-						<button
-							on:click={() => shareOnLine(userName, currentFortune)}
-							class="transform rounded-full bg-green-500 px-6 py-3 text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+						</a>
+
+						<a
+							href={`https://line.me/R/msg/text/?${encodeURIComponent(
+								`${userData.nickname}さんの運命の結果は「${currentFortune.titleEn}」です！ ${$page.url.href}`
+							)}`}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="transform rounded-full bg-green-500 px-6 py-3 text-center
+                                  text-white shadow-lg transition-all duration-300
+                                  hover:scale-105 hover:shadow-xl"
 						>
 							LINE で共有
-						</button>
+						</a>
 					</div>
-				</div>
+				</nav>
 			</div>
 		</div>
-	</div>
+	</article>
 </main>
 
 <style>
-	:global(body) {
-		margin: 0;
-		padding: 0;
+	/* Base animations */
+	.animate-fade-in {
+		animation: fadeIn 0.5s ease-out;
+	}
+
+	.animate-slide-up {
+		animation: slideUp 0.5s ease-out;
+	}
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
+	@keyframes slideUp {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	/* Accessibility - Reduced motion */
+	@media (prefers-reduced-motion: reduce) {
+		.animate-fade-in,
+		.animate-slide-up {
+			animation: none;
+		}
 	}
 </style>

@@ -1,200 +1,148 @@
 <script lang="ts">
-	import { fade, scale, fly } from 'svelte/transition';
-	import { backOut, elasticOut } from 'svelte/easing';
-	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
 
-	let selectedCard: number | null = null;
-	let isRevealing = false;
-	let isShuffling = false;
-	let hasShuffled = false;
+	// Static data
+	const fortunes = [
+		{ number: 1, name: '大大吉', emoji: '✨', color: 'from-violet-500 to-purple-600' },
+		{ number: 2, name: '大吉', emoji: '🌟', color: 'from-rose-500 to-pink-600' },
+		{ number: 3, name: '大吉', emoji: '🌟', color: 'from-rose-500 to-pink-600' },
+		{ number: 4, name: '大吉', emoji: '🌟', color: 'from-rose-500 to-pink-600' },
+		{ number: 5, name: '大吉', emoji: '🌟', color: 'from-rose-500 to-pink-600' },
+		{ number: 6, name: '大吉', emoji: '🌟', color: 'from-rose-500 to-pink-600' },
+		{ number: 7, name: '大吉', emoji: '🌟', color: 'from-rose-500 to-pink-600' }
+	];
 
-	// Optimized fortune list with emojis and improved descriptions
-	const fortunes = Object.freeze([
-		{
-			number: 1,
-			name: '大大吉',
-			emoji: '✨',
-			color: 'from-violet-500 to-purple-600'
-		},
-		{
-			number: 2,
-			name: '大吉',
-			emoji: '🌟',
-			color: 'from-rose-500 to-pink-600'
-		},
-		{
-			number: 3,
-			name: '大吉',
-			emoji: '🌟',
-			color: 'from-rose-500 to-pink-600'
-		},
-		{
-			number: 4,
-			name: '大吉',
-			emoji: '🌟',
-			color: 'from-rose-500 to-pink-600'
-		},
-		{
-			number: 5,
-			name: '大吉',
-			emoji: '🌟',
-			color: 'from-rose-500 to-pink-600'
-		},
-		{
-			number: 6,
-			name: '大吉',
-			emoji: '🌟',
-			color: 'from-rose-500 to-pink-600'
-		},
-		{
-			number: 7,
-			name: '大吉',
-			emoji: '🌟',
-			color: 'from-rose-500 to-pink-600'
-		}
-		// ... (keep other fortunes with added emojis)
-	]);
+	// Reactive state using Svelte store
+	import { writable } from 'svelte/store';
+	const shuffledCards = writable(fortunes);
+	const isShuffling = writable(false);
+	const hasShuffled = writable(false);
 
-	let shuffledFortunes = [...fortunes];
+	// Shuffle functionality using SvelteKit's action
+	function handleShuffle() {
+		isShuffling.set(true);
+		hasShuffled.set(true);
 
-	// Improved shuffle animation with spring physics
-	function shuffleCards() {
-		if (isShuffling) return;
-		isShuffling = true;
-		hasShuffled = true;
+		const shuffled = [...$shuffledCards].sort(() => Math.random() - 0.5);
+		shuffledCards.set(shuffled);
 
-		const newShuffled = [...shuffledFortunes];
-		for (let i = newShuffled.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1));
-			[newShuffled[i], newShuffled[j]] = [newShuffled[j], newShuffled[i]];
-		}
-
-		shuffledFortunes = newShuffled;
-
-		// Smoother animation timing
-		setTimeout(() => {
-			isShuffling = false;
-		}, 600);
+		setTimeout(() => isShuffling.set(false), 600);
 	}
-
-	function goToResult(fortune: number) {
-		if (isRevealing) return;
-		selectedCard = fortune;
-		isRevealing = true;
-
-		// Add haptic feedback if available
-		if (window.navigator.vibrate) {
-			window.navigator.vibrate(100);
-		}
-
-		setTimeout(() => {
-			window.location.href = `/result/${fortune}`;
-		}, 100);
-	}
-
-	onMount(() => {
-		// Initial subtle shuffle
-		setTimeout(shuffleCards, 500);
-	});
 </script>
 
 <div
 	class="min-h-screen bg-gradient-to-br from-red-50 via-pink-50 to-purple-50 px-4 py-8 sm:px-6 lg:px-8"
-	in:fade|local={{ duration: 100 }}
 >
 	<div class="mx-auto max-w-7xl">
-		<!-- Enhanced Header Section -->
-		<div class="mb-12 space-y-6 text-center" in:fly|local={{ y: -20, duration: 800, delay: 200 }}>
+		<!-- Header Section -->
+		<header class="animate-fade-in mb-12 space-y-6 text-center">
 			<h1
-				class="bg-gradient-to-r from-red-600 via-purple-600 to-pink-600 bg-clip-text text-5xl font-bold
-                       text-transparent drop-shadow-sm sm:text-6xl"
+				class="bg-gradient-to-r from-red-600 via-purple-600 to-pink-600 bg-clip-text text-5xl
+                       font-bold text-transparent drop-shadow-sm sm:text-6xl"
 			>
 				運命のカード
 			</h1>
 			<p class="mx-auto max-w-2xl text-xl text-gray-700">
 				心を落ち着かせて、あなたの運命のカードを選んでください
 			</p>
+
+			<!-- Shuffle Button -->
 			<button
-				class="group relative rounded-full bg-gradient-to-r from-red-500 via-purple-500 to-pink-500 px-8
-                       py-3 text-lg font-medium text-white shadow-lg
+				type="button"
+				on:click={handleShuffle}
+				disabled={$isShuffling}
+				class="group relative rounded-full bg-gradient-to-r from-red-500 via-purple-500
+                       to-pink-500 px-8 py-3 text-lg font-medium text-white shadow-lg
                        transition-all duration-300 hover:scale-105 hover:shadow-xl
                        focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2
                        disabled:cursor-not-allowed disabled:opacity-50"
-				on:click={shuffleCards}
-				disabled={isRevealing || isShuffling}
 			>
 				<span class="relative flex items-center justify-center gap-2">
-					<svg class="h-5 w-5 animate-spin" class:hidden={!isShuffling} viewBox="0 0 24 24">
-						<circle
-							class="opacity-25"
-							cx="12"
-							cy="12"
-							r="10"
-							stroke="currentColor"
-							stroke-width="4"
-							fill="none"
-						/>
-						<path
-							class="opacity-75"
-							fill="currentColor"
-							d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-						/>
-					</svg>
-					{isShuffling ? 'シャッフル中...' : 'カードをシャッフル'}
+					{#if $isShuffling}
+						<svg class="h-5 w-5 animate-spin" viewBox="0 0 24 24">
+							<circle
+								class="opacity-25"
+								cx="12"
+								cy="12"
+								r="10"
+								stroke="currentColor"
+								stroke-width="4"
+								fill="none"
+							/>
+							<path
+								class="opacity-75"
+								fill="currentColor"
+								d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+							/>
+						</svg>
+						シャッフル中...
+					{:else}
+						カードをシャッフル
+					{/if}
 				</span>
 			</button>
-		</div>
+		</header>
 
-		<!-- Improved Card Grid -->
-		<div
+		<!-- Fortune Cards Grid -->
+		<section
 			class="mb-12 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4 lg:gap-8"
-			class:pointer-events-none={isShuffling}
+			class:pointer-events-none={$isShuffling}
+			class:animate-shuffle={$isShuffling}
 		>
-			{#each shuffledFortunes as fortune, i (fortune.number)}
-				<button
-					type="button"
-					class="aspect-[2/3] w-full rounded-lg bg-gradient-to-br {fortune.color} 
-                   shadow-sm transition-opacity duration-150 hover:opacity-90
-                   disabled:cursor-not-allowed"
-					class:opacity-50={isRevealing && selectedCard !== fortune.number}
-					on:click={() => goToResult(fortune.number)}
-					disabled={isRevealing || isShuffling}
+			{#each $shuffledCards as fortune (fortune.number)}
+				<a
+					href="/result/{fortune.number}"
+					class="group block aspect-[2/3] w-full rounded-lg bg-gradient-to-br {fortune.color}
+                          shadow-sm transition-all duration-300 hover:scale-105 hover:shadow-xl
+                          focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
 				>
-					<div class="flex h-full flex-col items-center justify-center p-3">
-						<span class="text-2xl text-white">{fortune.emoji}</span>
-						<div class="writing-vertical mt-2">
-							<h3 class="text-lg font-medium text-white">{fortune.name}</h3>
-						</div>
-					</div>
-				</button>
+					<article class="flex h-full flex-col items-center justify-center p-3">
+						<span class="text-2xl text-white" aria-hidden="true">{fortune.emoji}</span>
+						<h2 class="writing-vertical mt-2 text-lg font-medium text-white">
+							{fortune.name}
+						</h2>
+					</article>
+				</a>
 			{/each}
-		</div>
+		</section>
 
-		<!-- Interactive Guide -->
-		{#if !hasShuffled}
-			<div
-				class="animate-pulse space-y-4 text-center"
-				in:fade|local={{ duration: 300, delay: 1000 }}
-			>
-				<p class="text-lg text-gray-600">↑ まずはカードをシャッフルしてください ↑</p>
-			</div>
-		{:else}
-			<div class="space-y-4 text-center" in:fade|local={{ duration: 300 }}>
-				<p class="text-lg text-gray-600">カードを選んでタップしてください</p>
-			</div>
-		{/if}
+		<!-- User Guide -->
+		<footer class="text-center">
+			{#if !$hasShuffled}
+				<p class="animate-pulse text-lg text-gray-600">↑ まずはカードをシャッフルしてください ↑</p>
+			{:else}
+				<p class="animate-fade-in text-lg text-gray-600">カードを選んでタップしてください</p>
+			{/if}
+		</footer>
 	</div>
 </div>
 
 <style>
-	/* Improved vertical writing mode */
+	/* Base card animations */
+	.animate-fade-in {
+		animation: fadeIn 0.5s ease-out;
+	}
+
+	.animate-shuffle {
+		animation: shuffle 0.6s ease-in-out;
+	}
+
+	/* Vertical writing mode */
 	.writing-vertical {
 		writing-mode: vertical-rl;
 		text-orientation: upright;
-		will-change: transform;
 	}
 
-	/* Enhanced shuffle animation */
+	/* Animations */
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
 	@keyframes shuffle {
 		0%,
 		100% {
@@ -208,29 +156,16 @@
 		}
 	}
 
-	.animate-shuffle {
-		animation: shuffle 0.6s ease-in-out;
-		will-change: transform;
-	}
-
-	/* Performance optimizations */
-	.transform-gpu {
-		transform: translateZ(0);
-	}
-
-	/* Responsive design improvements */
+	/* Responsive adjustments */
 	@media (max-width: 640px) {
 		.writing-vertical {
 			font-size: 90%;
 		}
 	}
 
-	/* Reduced motion preferences */
+	/* Accessibility - Reduced motion */
 	@media (prefers-reduced-motion: reduce) {
-		.animate-shuffle {
-			animation: none;
-		}
-
+		.animate-shuffle,
 		.animate-pulse {
 			animation: none;
 		}
