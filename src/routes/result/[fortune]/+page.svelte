@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { fortuneData } from '$lib/fortuneData';
 
 	// Load fortune from URL parameter
-	const fortune = parseInt($page.params.fortune, 10);
+	const fortune = parseInt(page.params.fortune, 10);
 	const currentFortune = fortuneData[fortune as keyof typeof fortuneData] || {
 		image: '/images/default.png',
 		title: '運命',
@@ -104,7 +104,7 @@
 						<a
 							href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
 								`${userData.nickname}さんの運命の結果は「${currentFortune.titleEn}」です！`
-							)}&url=${encodeURIComponent($page.url.href)}`}
+							)}&url=${encodeURIComponent(page.url.href)}`}
 							target="_blank"
 							rel="noopener noreferrer"
 							class="transform rounded-full bg-blue-500 px-6 py-3 text-center
@@ -116,7 +116,7 @@
 
 						<a
 							href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-								$page.url.href
+								page.url.href
 							)}`}
 							target="_blank"
 							rel="noopener noreferrer"
@@ -129,7 +129,7 @@
 
 						<a
 							href={`https://line.me/R/msg/text/?${encodeURIComponent(
-								`${userData.nickname}さんの運命の結果は「${currentFortune.titleEn}」です！ ${$page.url.href}`
+								`${userData.nickname}さんの運命の結果は「${currentFortune.titleEn}」です！ ${page.url.href}`
 							)}`}
 							target="_blank"
 							rel="noopener noreferrer"
