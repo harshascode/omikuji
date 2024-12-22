@@ -49,7 +49,7 @@
 			<!-- Shuffle Button -->
 			<button
 				type="button"
-				on:click={handleShuffle}
+				onclick={handleShuffle}
 				disabled={$isShuffling}
 				class="group relative rounded-full bg-gradient-to-r from-red-500 via-purple-500
                        to-pink-500 px-8 py-3 text-lg font-medium text-white shadow-lg

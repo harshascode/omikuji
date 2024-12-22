@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 
-	let isSubmitting = false;
-	let formData = {
+	let isSubmitting = $state(false);
+	let formData = $state({
 		nickname: '',
 		gender: '',
 		loveStatus: ''
-	};
+	});
 
 	// Simple client-side form handling
 	function handleSubmit(event: SubmitEvent) {
@@ -47,7 +47,7 @@
 
 		<!-- Form Section -->
 		<section class="space-y-6 rounded-xl bg-white/80 p-6 shadow-lg backdrop-blur-md">
-			<form on:submit={handleSubmit} class="space-y-8">
+			<form onsubmit={handleSubmit} class="space-y-8">
 				<!-- Nickname Input -->
 				<div
 					class="group rounded-lg border-2 border-pink-100 bg-white p-6 transition-transform duration-300 hover:scale-[1.02]"

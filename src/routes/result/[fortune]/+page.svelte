@@ -13,9 +13,9 @@
 	};
 
 	// Get user data from session storage
-	let userData = {
+	let userData = $state({
 		nickname: ''
-	};
+	});
 
 	if (typeof window !== 'undefined') {
 		const stored = sessionStorage.getItem('fortuneUserData');
