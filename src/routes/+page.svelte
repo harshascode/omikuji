@@ -23,7 +23,7 @@
 		>
 			恋みくじ
 		</h1>
-		<p class="text-2xl font-medium tracking-wide text-gray-700">運命の恋を占う88888888</p>
+		<p class="text-2xl font-medium tracking-wide text-gray-700">運命の恋を占う7777777</p>
 	</header>
 
 	<!-- Koi Image Section -->
