@@ -23,7 +23,7 @@
 		>
 			恋みくじ
 		</h1>
-		<p class="text-2xl font-medium tracking-wide text-gray-700">運命の恋を占う666666</p>
+		<p class="text-2xl font-medium tracking-wide text-gray-700">運命の恋を占う</p>
 	</header>
 
 	<!-- Koi Image Section -->
@@ -37,23 +37,6 @@
 			loading="lazy"
 			decoding="async"
 		/>
-	</section>
-
-	<!-- Features Grid -->
-	<section class="container mx-auto px-6" aria-label="Features">
-		<div class="mt-24 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-			{#each features as [icon, title, subtitle]}
-				<article
-					class="rounded-2xl bg-white p-8 shadow-xl transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl"
-				>
-					<div class="text-center">
-						<span class="inline-block text-5xl" aria-hidden="true">{icon}</span>
-						<h2 class="mt-6 text-2xl font-bold text-gray-800">{title}</h2>
-						<p class="mt-3 text-gray-600">{subtitle}</p>
-					</div>
-				</article>
-			{/each}
-		</div>
 	</section>
 
 	<!-- CTA Section -->
@@ -73,6 +56,41 @@
 			</svg>
 		</a>
 	</section>
+
+	<!-- Features Grid -->
+	<section class="container mx-auto px-6" aria-label="Features">
+		<div class="mt-24 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+			{#each features as [icon, title, subtitle]}
+				<article
+					class="rounded-2xl bg-white p-8 shadow-xl transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl"
+				>
+					<div class="text-center">
+						<span class="inline-block text-5xl" aria-hidden="true">{icon}</span>
+						<h2 class="mt-6 text-2xl font-bold text-gray-800">{title}</h2>
+						<p class="mt-3 text-gray-600">{subtitle}</p>
+					</div>
+				</article>
+			{/each}
+		</div>
+	</section>
+
+	<!-- CTA Section
+	<section class="container mx-auto mt-24 px-6 text-center">
+		<a
+			href="/draw"
+			class="inline-flex items-center rounded-full bg-gradient-to-r from-red-500 to-pink-500 px-10 py-5 text-xl font-bold text-white shadow-lg transition-all duration-300 hover:shadow-xl"
+		>
+			恋みくじを引く
+			<svg class="ml-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M13 7l5 5m0 0l-5 5m5-5H6"
+				/>
+			</svg>
+		</a>
+	</section> -->
 
 	<!-- Description Section -->
 	<section class="mt-24 bg-white py-24">
